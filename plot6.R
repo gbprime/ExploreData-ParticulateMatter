@@ -5,18 +5,20 @@ plot6 <- function() {
   NEI$year <- factor(NEI$year, levels = c('1999', '2002', '2005', '2008'))
   SCC <- readRDS("data/Source_Classification_Code.rds")
   
-  # Subsetting the data by city and give each dataset a city name.
+  # Subsetting the data by city and give each dataset a city name
   baltimoreEmissions <- subset(NEI, fips == '24510' & type == 'ON-ROAD')
   baltimoreEmissions$city <- "Baltimore"
   LAEmissions <- subset(NEI, fips == '06037' & type == 'ON-ROAD')
   LAEmissions$city <- "Los Angeles"
   
-  # Combine the two subsets with city name into one data frame
+  # Binding the two subsets into one dataframe
   bothCities <- rbind(baltimoreEmissions, LAEmissions)
   
   library(ggplot2)
   png("plot6.png", width=800, height=500, units="px", bg="transparent")
   
+  # answering the question by placing the bar graphs next to each other.  
+  # side-by-side comparison looks better than top-bottom diagrams.
   p <- ggplot(bothCities, aes(x=factor(year), y=Emissions, fill=city)) +
     geom_bar(aes(fill=year),stat="identity") +
     facet_grid(scales="free", space="free", .~city) +

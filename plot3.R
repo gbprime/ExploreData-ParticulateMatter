@@ -5,10 +5,8 @@ plot3 <- function() {
   NEI <- readRDS("data/summarySCC_PM25.rds")
   SCC <- readRDS("data/Source_Classification_Code.rds")
   
-  # Baltimore City, Maryland == fips
+  # Getting/subsetting and aggregating the data by year and type
   baltimoreEmissions <- subset(NEI, fips == 24510)
-  
-  # Group data by year and type of the source
   aggregateBaltimoreEmissionsPerTypeAndYear <- aggregate(Emissions ~ year + type, 
                                                          data = baltimoreEmissions, 
                                                          FUN=sum)
@@ -21,7 +19,8 @@ plot3 <- function() {
   # than line graphs in this case.
   p <- ggplot(aggregateBaltimoreEmissionsPerTypeAndYear, aes(x=factor(year), y=Emissions, fill=type)) +
     geom_bar(stat="identity") +
-    facet_grid(. ~ type) +
+    facet_grid(scales="free", space="free", . ~ type) +
+    guides(fill=FALSE) + theme_bw() +
     xlab("Year") +
     ylab(expression('PM'[2]*'')) +
     ggtitle(expression("PM"[2.5]*paste(" Emissions per Type in Baltimore.", sep="")))

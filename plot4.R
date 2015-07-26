@@ -5,14 +5,14 @@ plot4 <- function() {
   NEI <- readRDS("data/summarySCC_PM25.rds")
   SCC <- readRDS("data/Source_Classification_Code.rds")
   
-  # Find coal combustion-related sources
+  # Finding coal combustion-related sources
   coalBased <- grepl("Fuel Comb.*Coal", SCC$EI.Sector)
   coalCombustionSources <- SCC[coalBased,]
   
-  # Find emissions from coal combustion-related sources
+  # Finding emissions from coal combustion-related sources
   emissions <- NEI[(NEI$SCC %in% coalCombustionSources$SCC), ]
   
-  # group by year
+  # Grouping by year
   aggregateEmissionsPerYear <- aggregate(Emissions ~ year, data=emissions, FUN=sum)
   
   # plot
